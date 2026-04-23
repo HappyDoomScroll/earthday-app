@@ -19,8 +19,12 @@
   }
   html, body, #root { 
     width: 100%; 
-    height: 100%; 
+    height: 100%;
+    /* Use dynamic viewport height to prevent iOS Safari address bar jumping */
+    height: 100dvh; 
     overflow: hidden; 
+    /* Lock the viewport to prevent accidental pull-to-refresh */
+    overscroll-behavior: none;
     background: #38BDF8; 
     font-family: 'Fredoka', sans-serif;
   }
@@ -416,7 +420,8 @@ function Game({ level, onComplete }) {
         </div>
       </div>
 
-      <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(70px, 1fr))', gap:10, marginBottom:10}}>
+      {/* Grid updated to minmax(65px, 1fr) to prevent wrap on tiny screens like iPhone SE */}
+      <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(65px, 1fr))', gap:10, marginBottom:10}}>
         {lData.bins.map(bId => {
           const b = BINS[bId];
           const isHovered = hoveredBin === bId;
@@ -442,7 +447,8 @@ function Game({ level, onComplete }) {
       </div>
 
       {dragPos && (
-        <div style={{position:'fixed', left:dragPos.x-50, top:dragPos.y-50, pointerEvents:'none', zIndex:100}}>
+        /* The Y position is offset by -90 so the item hovers ABOVE the user's finger, not directly beneath it */
+        <div style={{position:'fixed', left:dragPos.x-50, top:dragPos.y-90, pointerEvents:'none', zIndex:100}}>
           <div style={{width:'100px', height:'100px', background:CARD_BG, border:`4px solid ${BORDER_COLOR}`, borderRadius:'20px', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:`0 10px 20px rgba(0,0,0,0.2)`}}>
             <ItemIcon type={currentItem.type} size={60} />
           </div>
