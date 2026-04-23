@@ -89,46 +89,47 @@ const BINS = {
   special: { id:'special', label:'E-Waste', color:'#FBBF24', shadow:'#D97706' },
 };
 
+// Updated Item mappings to use the new exact types
 const ALL_ITEMS = [
-  {id:1,  type:'apple',  name:'Apple Core',      bin:'compost',fact:'Apple cores break down into rich soil that helps plants grow!'},
-  {id:2,  type:'banana', name:'Banana Peel',     bin:'compost',fact:'Banana peels are packed with potassium — worms love them!'},
-  {id:3,  type:'orange', name:'Orange Peel',     bin:'compost',fact:'Citrus peels slowly break down and become plant food!'},
-  {id:4,  type:'food',   name:'Egg Shells',      bin:'compost',fact:'Egg shells give calcium to soil, making veggies stronger!'},
-  {id:5,  type:'coffee', name:'Coffee Grounds',  bin:'compost',fact:'Coffee grounds are like vitamins for garden soil!'},
-  {id:6,  type:'leaves', name:'Dead Leaves',     bin:'compost',fact:'Fallen leaves turn into fluffy, rich compost in months!'},
-  {id:7,  type:'grass',  name:'Grass Clippings', bin:'compost',fact:'Grass clippings break down super fast and feed your lawn!'},
-  {id:8,  type:'carrot', name:'Carrot Scraps',   bin:'compost',fact:'Carrot tops and peelings are perfect food for compost worms!'},
-  {id:9,  type:'food',   name:'Cooked Pasta',    bin:'compost',fact:'Leftover pasta becomes food for billions of tiny soil creatures!'},
-  {id:10, type:'food',   name:'Veggie Scraps',   bin:'compost',fact:'Vegetable scraps turn into garden gold in just a few weeks!'},
-  {id:11, type:'bottle', name:'Plastic Bottle',  bin:'recycle',fact:'One plastic bottle can become stuffing for a winter jacket!'},
-  {id:12, type:'jug',    name:'Plastic Jug',     bin:'recycle',fact:'Plastic jugs get melted down into park benches and toys!'},
-  {id:13, type:'bottle', name:'Glass Jar',       bin:'recycle',fact:'Glass can be recycled forever — it never wears out!'},
-  {id:14, type:'can',    name:'Aluminum Can',    bin:'recycle',fact:'Recycling one can saves enough energy to run a TV for 3 hours!'},
-  {id:15, type:'box',    name:'Cardboard Box',   bin:'recycle',fact:'Cardboard breaks down and becomes brand new boxes!'},
-  {id:16, type:'box',    name:'Milk Carton',     bin:'recycle',fact:'Milk cartons get turned into paper towels and tissue!'},
-  {id:17, type:'bottle', name:'Glass Bottle',    bin:'recycle',fact:'A recycled glass bottle uses 40% less energy to make!'},
-  {id:18, type:'paper',  name:'Magazine',        bin:'recycle',fact:'Magazines get shredded and turned into new paper products!'},
-  {id:19, type:'box',    name:'Juice Box',       bin:'recycle',fact:'Juice boxes can be recycled into roof tiles and flooring!'},
-  {id:20, type:'box',    name:'Cereal Box',      bin:'recycle',fact:'Cereal boxes are made of clean paperboard, which is easy to recycle!'},
-  {id:21, type:'wrapper',name:'Bubble Wrap',     bin:'trash',  fact:'Bubble wrap gets tangled in recycling machines! Put it in the trash.'},
-  {id:22, type:'cup',    name:'Styrofoam Cup',   bin:'trash',  fact:'Styrofoam lasts 500 years! It belongs in the trash.'},
-  {id:23, type:'tissue', name:'Used Tissue',     bin:'trash',  fact:'Used tissues carry germs, so they always go in the trash!'},
-  {id:24, type:'straw',  name:'Plastic Straw',   bin:'trash',  fact:'Straws are too small for recycling machines!'},
-  {id:25, type:'bag',    name:'Chip Bag',        bin:'trash',  fact:'Chip bags mix plastic and foil — they can\'t be recycled!'},
-  {id:26, type:'wrapper',name:'Candy Wrapper',   bin:'trash',  fact:'Candy wrappers use mixed materials that can\'t be separated.'},
-  {id:27, type:'toy',    name:'Broken Toy',      bin:'trash',  fact:'Toys are made of mixed plastics that normal centers can\'t melt down!'},
-  {id:28, type:'trash',  name:'Broken Ceramic',  bin:'trash',  fact:'Broken ceramics can\'t be melted with glass — different materials!'},
-  {id:29, type:'battery',name:'Battery',         bin:'special',fact:'Batteries have toxic chemicals. Never put them in regular trash!'},
-  {id:30, type:'tech',   name:'Old Phone',       bin:'special',fact:'Phones have gold and rare metals inside. Recycle them as e-waste!'},
-  {id:31, type:'tech',   name:'Old Laptop',      bin:'special',fact:'Laptops have valuable metals — always e-waste recycle!'},
-  {id:32, type:'lightbulb',name:'Light Bulb',    bin:'special',fact:'Some light bulbs contain a tiny amount of mercury that needs careful disposal!'},
-  {id:33, type:'tech',   name:'Ink Cartridge',   bin:'special',fact:'Ink cartridges can be refilled! Many stores take them back for free!'},
-  {id:34, type:'can',    name:'Paint Can',       bin:'special',fact:'Old paint is hazardous waste — it needs special collection!'},
-  {id:35, type:'cord',   name:'Old Charger',     bin:'special',fact:'Cables contain copper! Take them to an e-waste bin.'},
-  {id:36, type:'tech',   name:'Broken Tablet',   bin:'special',fact:'Tablets contain toxic batteries. They need special e-waste care!'},
+  {id:1,  type:'apple',      name:'Apple Core',      bin:'compost',fact:'Apple cores break down into rich soil that helps plants grow!'},
+  {id:2,  type:'banana',     name:'Banana Peel',     bin:'compost',fact:'Banana peels are packed with potassium — worms love them!'},
+  {id:3,  type:'orange',     name:'Orange Peel',     bin:'compost',fact:'Citrus peels slowly break down and become plant food!'},
+  {id:4,  type:'food',       name:'Egg Shells',      bin:'compost',fact:'Egg shells give calcium to soil, making veggies stronger!'},
+  {id:5,  type:'coffee',     name:'Coffee Grounds',  bin:'compost',fact:'Coffee grounds are like vitamins for garden soil!'},
+  {id:6,  type:'leaves',     name:'Dead Leaves',     bin:'compost',fact:'Fallen leaves turn into fluffy, rich compost in months!'},
+  {id:7,  type:'grass',      name:'Grass Clippings', bin:'compost',fact:'Grass clippings break down super fast and feed your lawn!'},
+  {id:8,  type:'carrot',     name:'Carrot Scraps',   bin:'compost',fact:'Carrot tops and peelings are perfect food for compost worms!'},
+  {id:9,  type:'food',       name:'Cooked Pasta',    bin:'compost',fact:'Leftover pasta becomes food for billions of tiny soil creatures!'},
+  {id:10, type:'food',       name:'Veggie Scraps',   bin:'compost',fact:'Vegetable scraps turn into garden gold in just a few weeks!'},
+  {id:11, type:'bottle',     name:'Plastic Bottle',  bin:'recycle',fact:'One plastic bottle can become stuffing for a winter jacket!'},
+  {id:12, type:'jug',        name:'Plastic Jug',     bin:'recycle',fact:'Plastic jugs get melted down into park benches and toys!'},
+  {id:13, type:'jar',        name:'Glass Jar',       bin:'recycle',fact:'Glass can be recycled forever — it never wears out!'},
+  {id:14, type:'can',        name:'Aluminum Can',    bin:'recycle',fact:'Recycling one can saves enough energy to run a TV for 3 hours!'},
+  {id:15, type:'box',        name:'Cardboard Box',   bin:'recycle',fact:'Cardboard breaks down and becomes brand new boxes!'},
+  {id:16, type:'carton',     name:'Milk Carton',     bin:'recycle',fact:'Milk cartons get turned into paper towels and tissue!'},
+  {id:17, type:'glassbottle',name:'Glass Bottle',    bin:'recycle',fact:'A recycled glass bottle uses 40% less energy to make!'},
+  {id:18, type:'paper',      name:'Magazine',        bin:'recycle',fact:'Magazines get shredded and turned into new paper products!'},
+  {id:19, type:'carton',     name:'Juice Box',       bin:'recycle',fact:'Juice boxes can be recycled into roof tiles and flooring!'},
+  {id:20, type:'box',        name:'Cereal Box',      bin:'recycle',fact:'Cereal boxes are made of clean paperboard, which is easy to recycle!'},
+  {id:21, type:'bubblewrap', name:'Bubble Wrap',     bin:'trash',  fact:'Bubble wrap gets tangled in recycling machines! Put it in the trash.'},
+  {id:22, type:'cup',        name:'Styrofoam Cup',   bin:'trash',  fact:'Styrofoam lasts 500 years! It belongs in the trash.'},
+  {id:23, type:'tissue',     name:'Used Tissue',     bin:'trash',  fact:'Used tissues carry germs, so they always go in the trash!'},
+  {id:24, type:'straw',      name:'Plastic Straw',   bin:'trash',  fact:'Straws are too small for recycling machines!'},
+  {id:25, type:'bag',        name:'Chip Bag',        bin:'trash',  fact:'Chip bags mix plastic and foil — they can\'t be recycled!'},
+  {id:26, type:'wrapper',    name:'Candy Wrapper',   bin:'trash',  fact:'Candy wrappers use mixed materials that can\'t be separated.'},
+  {id:27, type:'toy',        name:'Broken Toy',      bin:'trash',  fact:'Toys are made of mixed plastics that normal centers can\'t melt down!'},
+  {id:28, type:'ceramic',    name:'Broken Ceramic',  bin:'trash',  fact:'Broken ceramics can\'t be melted with glass — different materials!'},
+  {id:29, type:'battery',    name:'Battery',         bin:'special',fact:'Batteries have toxic chemicals. Never put them in regular trash!'},
+  {id:30, type:'tech',       name:'Old Phone',       bin:'special',fact:'Phones have gold and rare metals inside. Recycle them as e-waste!'},
+  {id:31, type:'laptop',     name:'Old Laptop',      bin:'special',fact:'Laptops have valuable metals — always e-waste recycle!'},
+  {id:32, type:'lightbulb',  name:'Light Bulb',      bin:'special',fact:'Some light bulbs contain a tiny amount of mercury that needs careful disposal!'},
+  {id:33, type:'cartridge',  name:'Ink Cartridge',   bin:'special',fact:'Ink cartridges can be refilled! Many stores take them back for free!'},
+  {id:34, type:'paintcan',   name:'Paint Can',       bin:'special',fact:'Old paint is hazardous waste — it needs special collection!'},
+  {id:35, type:'cord',       name:'Old Charger',     bin:'special',fact:'Cables contain copper! Take them to an e-waste bin.'},
+  {id:36, type:'tech',       name:'Broken Tablet',   bin:'special',fact:'Tablets contain toxic batteries. They need special e-waste care!'},
   {id:37, type:'controller', name:'Game Controller', bin:'special',fact:'Old controllers have complex circuit boards that are e-waste!'},
   {id:38, type:'cord',       name:'Tangled Earbuds', bin:'special',fact:'Earbuds contain tiny valuable wires recovered at e-waste centers!'},
-  {id:39, type:'tech',       name:'TV Remote',       bin:'special',fact:'Remotes are e-waste! Take the batteries out first!'},
+  {id:39, type:'remote',     name:'TV Remote',       bin:'special',fact:'Remotes are e-waste! Take the batteries out first!'},
   {id:40, type:'fork',       name:'Plastic Fork',    bin:'trash',  fact:'Small plastic items like forks often can\'t be recycled.'},
   {id:41, type:'organic',    name:'Watermelon Rind', bin:'compost',fact:'Watermelon rinds are great for compost!'},
   {id:42, type:'paper',      name:'Junk Mail',       bin:'recycle',fact:'Most junk mail can easily be recycled into brand new paper!'},
@@ -164,38 +165,274 @@ function BinIcon({ type, size=40, color="white" }) {
   );
 }
 
+// Entirely overhauled Icons
 function ItemIcon({ type, size=80 }) {
   const stroke = BORDER_COLOR;
   let inner = null;
   switch(type) {
-    case 'apple': inner = <g><path d="M 40 30 C 40 50, 45 50, 45 70 L 55 70 C 55 50, 60 50, 60 30 Z" fill="#FEF08A" stroke={stroke} strokeWidth="6" strokeLinejoin="round"/><path d="M 35 30 C 20 10, 80 10, 65 30 Z" fill="#EF4444" stroke={stroke} strokeWidth="6" strokeLinejoin="round"/><path d="M 35 70 C 20 90, 80 90, 65 70 Z" fill="#EF4444" stroke={stroke} strokeWidth="6" strokeLinejoin="round"/><path d="M 50 15 Q 65 5 75 20 Q 60 30 50 15 Z" fill="#4ADE80" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/></g>; break;
-    case 'banana': inner = <g><path d="M 35 22 Q 65 40 85 75 Q 30 85 25 25 Z" fill="#FDE047" stroke={stroke} strokeWidth="6" strokeLinejoin="round"/><path d="M 35 22 L 30 8 L 20 10 L 25 25 Z" fill="#A3E635" stroke={stroke} strokeWidth="6" strokeLinejoin="round"/></g>; break;
-    case 'orange': inner = <g><path d="M 20 30 Q 50 10 80 30 L 50 80 Z" fill="#F97316" stroke={stroke} strokeWidth="6" strokeLinejoin="round"/><path d="M 28 35 Q 50 20 72 35 L 50 70 Z" fill="#FDBA74" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/></g>; break;
-    case 'food': inner = <g><ellipse cx="50" cy="50" rx="35" ry="30" fill="#FDE047" stroke={stroke} strokeWidth="6"/><circle cx="35" cy="40" r="4" fill={stroke}/><circle cx="65" cy="50" r="4" fill={stroke}/></g>; break;
-    case 'organic': inner = <g><path d="M 15 50 Q 50 90 85 50 Z" fill="#F87171" stroke={stroke} strokeWidth="6" strokeLinejoin="round"/><path d="M 10 50 Q 50 100 90 50" fill="none" stroke="#22C55E" strokeWidth="10" strokeLinecap="round"/><circle cx="35" cy="65" r="3" fill={stroke}/><circle cx="50" cy="70" r="3" fill={stroke}/><circle cx="65" cy="65" r="3" fill={stroke}/></g>; break;
-    case 'leaves': inner = <g><path d="M 50 10 Q 75 30 50 90 Q 25 30 50 10" fill="#4ADE80" stroke={stroke} strokeWidth="5"/><path d="M 50 90 L 50 15" stroke={stroke} strokeWidth="4"/><path d="M 50 40 L 70 30 M 50 60 L 30 50" stroke={stroke} strokeWidth="4"/></g>; break;
-    case 'grass': inner = <g><path d="M 20 90 Q 30 20 50 90 M 40 90 Q 50 10 70 90 M 60 90 Q 80 30 90 90" fill="none" stroke="#22C55E" strokeWidth="8" strokeLinecap="round"/></g>; break;
-    case 'carrot': inner = <g><path d="M 40 25 L 60 25 L 55 85 Q 50 95 45 85 Z" fill="#F97316" stroke={stroke} strokeWidth="6" strokeLinejoin="round"/><path d="M 50 25 L 45 5 M 50 25 L 50 5 M 50 25 L 55 5" stroke="#4ADE80" strokeWidth="6" strokeLinecap="round"/></g>; break;
-    case 'bottle': inner = <g><path d="M 35 40 L 35 90 C 35 95, 65 95, 65 90 L 65 40 Q 65 25 55 20 L 55 10 L 45 10 L 45 20 Q 35 25 35 40 Z" fill="#93C5FD" stroke={stroke} strokeWidth="6" strokeLinejoin="round"/><rect x="35" y="55" width="30" height="20" fill="white" stroke={stroke} strokeWidth="6"/></g>; break;
-    case 'jug': inner = <g><path d="M 35 30 L 35 90 C 35 95, 75 95, 75 90 L 75 40 L 65 30 Z" fill="#E0F2FE" stroke={stroke} strokeWidth="6" strokeLinejoin="round"/><path d="M 75 50 Q 85 50 85 65 Q 85 80 75 80" fill="none" stroke={stroke} strokeWidth="6" strokeLinecap="round"/><rect x="42" y="15" width="16" height="15" fill="#38BDF8" stroke={stroke} strokeWidth="6"/></g>; break;
-    case 'box': inner = <g><path d="M 20 40 L 50 55 L 80 40 L 80 75 L 50 90 L 20 75 Z" fill="#F59E0B" stroke={stroke} strokeWidth="6" strokeLinejoin="round"/><path d="M 20 40 L 50 25 L 80 40 L 50 55 Z" fill="#FCD34D" stroke={stroke} strokeWidth="6" strokeLinejoin="round"/><path d="M 50 55 L 50 90" stroke={stroke} strokeWidth="6" strokeLinecap="round"/></g>; break;
-    case 'can': inner = <g><path d="M 25 25 L 25 75 C 25 85, 75 85, 75 75 L 75 25 Z" fill="#D1D5DB" stroke={stroke} strokeWidth="6" strokeLinejoin="round"/><ellipse cx="50" cy="25" rx="25" ry="10" fill="#E5E7EB" stroke={stroke} strokeWidth="6"/><ellipse cx="50" cy="25" rx="8" ry="4" fill="none" stroke={stroke} strokeWidth="4"/></g>; break;
-    case 'paper': inner = <g><rect x="25" y="15" width="50" height="70" rx="5" fill="#F3F4F6" stroke={stroke} strokeWidth="6"/><line x1="35" y1="35" x2="65" y2="35" stroke="#9CA3AF" strokeWidth="6" strokeLinecap="round"/><line x1="35" y1="55" x2="65" y2="55" stroke="#9CA3AF" strokeWidth="6" strokeLinecap="round"/></g>; break;
-    case 'wrapper': inner = <g><path d="M 20 35 L 35 45 L 35 55 L 20 65 Z" fill="#A78BFA" stroke={stroke} strokeWidth="6" strokeLinejoin="round"/><path d="M 80 35 L 65 45 L 65 55 L 80 65 Z" fill="#A78BFA" stroke={stroke} strokeWidth="6" strokeLinejoin="round"/><circle cx="50" cy="50" r="18" fill="#FDE047" stroke={stroke} strokeWidth="6"/></g>; break;
-    case 'cup': inner = <g><path d="M 25 35 L 35 90 C 35 95, 65 95, 65 90 L 75 35 Z" fill="white" stroke={stroke} strokeWidth="6" strokeLinejoin="round"/><rect x="28" y="50" width="44" height="20" fill="#D97706" stroke={stroke} strokeWidth="6"/></g>; break;
-    case 'straw': inner = <g><path d="M 30 80 L 70 20" stroke="#FBBF24" strokeWidth="12" strokeLinecap="round"/><path d="M 30 80 L 70 20" stroke="#FFFFFF" strokeWidth="12" strokeDasharray="10 10" strokeLinecap="round"/><path d="M 70 20 L 85 30" stroke="#FBBF24" strokeWidth="12" strokeLinecap="round"/></g>; break;
-    case 'tissue': inner = <g><path d="M 30 70 Q 50 90 70 70 Q 90 50 70 30 Q 50 10 30 30 Q 10 50 30 70" fill="white" stroke={stroke} strokeWidth="6"/><path d="M 40 40 L 60 60 M 60 40 L 40 60" stroke="#E5E7EB" strokeWidth="4"/></g>; break;
-    case 'toy': inner = <g><rect x="30" y="30" width="40" height="40" rx="5" fill="#F87171" stroke={stroke} strokeWidth="6"/><circle cx="35" cy="75" r="8" fill={stroke}/><circle cx="65" cy="75" r="8" fill={stroke}/><path d="M 30 30 L 20 20" stroke={stroke} strokeWidth="6" strokeLinecap="round"/></g>; break;
-    case 'bag': inner = <g><path d="M 25 15 L 75 15 L 80 85 L 20 85 Z" fill="#F87171" stroke={stroke} strokeWidth="6" strokeLinejoin="round"/><circle cx="50" cy="50" r="15" fill="#FDE047" stroke={stroke} strokeWidth="5"/></g>; break;
-    case 'battery': inner = <g><rect x="30" y="25" width="40" height="65" rx="5" fill="#10B981" stroke={stroke} strokeWidth="6"/><path d="M 40 25 L 40 15 L 60 15 L 60 25" fill="#374151" stroke={stroke} strokeWidth="6" strokeLinejoin="round"/><path d="M 45 45 L 55 45 M 50 40 L 50 50" stroke="white" strokeWidth="4" strokeLinecap="round"/></g>; break;
-    case 'lightbulb': inner = <g><path d="M 50 15 C 30 15, 30 55, 40 65 L 40 80 L 60 80 L 60 65 C 70 55, 70 15, 50 15 Z" fill="#FEF08A" stroke={stroke} strokeWidth="6" strokeLinejoin="round"/><rect x="42" y="80" width="16" height="10" rx="2" fill="#9CA3AF" stroke={stroke} strokeWidth="4"/><line x1="42" y1="85" x2="58" y2="85" stroke={stroke} strokeWidth="4"/><line x1="42" y1="90" x2="58" y2="90" stroke={stroke} strokeWidth="4"/><line x1="50" y1="5" x2="50" y2="10" stroke={stroke} strokeWidth="4" strokeLinecap="round"/><line x1="25" y1="25" x2="30" y2="30" stroke={stroke} strokeWidth="4" strokeLinecap="round"/><line x1="75" y1="25" x2="70" y2="30" stroke={stroke} strokeWidth="4" strokeLinecap="round"/></g>; break;
-    case 'tech': inner = <g><rect x="25" y="10" width="50" height="80" rx="10" fill="#374151" stroke={stroke} strokeWidth="6"/><rect x="32" y="20" width="36" height="50" rx="4" fill="#93C5FD" stroke={stroke} strokeWidth="4"/><circle cx="50" cy="80" r="4" fill="#F87171" stroke={stroke} strokeWidth="2"/></g>; break;
-    case 'controller': inner = <g><path d="M 20 45 Q 20 30 35 30 L 65 30 Q 80 30 80 45 L 85 65 Q 85 75 75 75 Q 65 75 60 65 L 50 60 L 40 65 Q 35 75 25 75 Q 15 75 15 65 Z" fill="#D1D5DB" stroke={stroke} strokeWidth="6" strokeLinejoin="round"/><circle cx="32" cy="45" r="6" fill="#9CA3AF" stroke={stroke} strokeWidth="4"/><circle cx="68" cy="40" r="3" fill="#F87171" stroke={stroke} strokeWidth="3"/><circle cx="60" cy="48" r="3" fill="#60A5FA" stroke={stroke} strokeWidth="3"/></g>; break;
-    case 'cord': inner = <g><path d="M 30 80 C 10 50, 90 50, 70 20" fill="none" stroke={stroke} strokeWidth="8" strokeLinecap="round"/><rect x="23" y="80" width="14" height="15" rx="3" fill="#9CA3AF" stroke={stroke} strokeWidth="5"/></g>; break;
-    case 'fork': inner = <g><path d="M 50 90 L 50 40 M 35 15 L 35 45 Q 40 55 50 55 Q 60 55 65 45 L 65 15" fill="none" stroke={stroke} strokeWidth="6" strokeLinejoin="round" strokeLinecap="round"/><path d="M 50 15 L 50 40" stroke={stroke} strokeWidth="6" strokeLinecap="round"/></g>; break;
-    case 'watch': inner = <g><rect x="35" y="35" width="30" height="30" rx="8" fill="#374151" stroke={stroke} strokeWidth="6"/><path d="M 40 35 L 40 10 L 60 10 L 60 35" fill="#9CA3AF" stroke={stroke} strokeWidth="6" strokeLinejoin="round"/><path d="M 40 65 L 40 90 L 60 90 L 60 65" fill="#9CA3AF" stroke={stroke} strokeWidth="6" strokeLinejoin="round"/><circle cx="50" cy="50" r="6" fill="#10B981" stroke={stroke} strokeWidth="2"/></g>; break;
-    case 'coffee': inner = <g><path d="M 20 80 Q 50 100 80 80 L 80 20 L 20 20 Z" fill="#7C2D12" stroke={stroke} strokeWidth="6"/><path d="M 30 30 L 70 30 M 35 50 L 65 50 M 40 70 L 60 70" stroke="white" strokeWidth="4" strokeLinecap="round"/></g>; break;
-    default: inner = <g><path d="M 30 30 Q 50 15 70 30 Q 85 50 70 70 Q 50 85 30 70 Q 15 50 30 30" fill="#9CA3AF" stroke={stroke} strokeWidth="6" strokeLinejoin="round"/><path d="M 40 40 L 60 60 M 60 40 L 40 60" stroke={stroke} strokeWidth="6" strokeLinecap="round"/></g>;
+    case 'apple': 
+      inner = <g>
+        <path d="M 35 25 C 25 45, 30 70, 35 80 Q 50 85 65 80 C 70 70, 75 45, 65 25 Q 50 20 35 25 Z" fill="#FEF08A" stroke={stroke} strokeWidth="5"/>
+        <path d="M 25 25 C 40 10, 60 10, 75 25 C 60 30, 40 30, 25 25 Z" fill="#EF4444" stroke={stroke} strokeWidth="5"/>
+        <path d="M 25 80 C 40 95, 60 95, 75 80 C 60 75, 40 75, 25 80 Z" fill="#EF4444" stroke={stroke} strokeWidth="5"/>
+        <path d="M 50 18 L 50 5" stroke={stroke} strokeWidth="5" strokeLinecap="round"/>
+        <path d="M 50 10 Q 65 0 70 15 Q 55 20 50 10 Z" fill="#4ADE80" stroke={stroke} strokeWidth="4"/>
+        <circle cx="45" cy="50" r="3" fill={stroke}/>
+        <circle cx="55" cy="50" r="3" fill={stroke}/>
+      </g>; break;
+    case 'banana': 
+      inner = <g>
+        <path d="M 45 80 L 55 80 L 52 95 L 48 95 Z" fill="#A3E635" stroke={stroke} strokeWidth="5"/>
+        <path d="M 50 75 C 30 70, 15 45, 20 30 C 30 45, 40 55, 50 75 Z" fill="#FDE047" stroke={stroke} strokeWidth="5"/>
+        <path d="M 50 75 C 70 70, 85 45, 80 30 C 70 45, 60 55, 50 75 Z" fill="#FDE047" stroke={stroke} strokeWidth="5"/>
+        <path d="M 45 75 C 40 55, 45 25, 50 15 C 55 25, 60 55, 55 75 Z" fill="#FEF08A" stroke={stroke} strokeWidth="5"/>
+      </g>; break;
+    case 'orange': 
+      inner = <g>
+        <path d="M 20 30 Q 50 10 80 30 L 70 70 Q 50 90 30 70 Z" fill="#F97316" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <path d="M 25 35 Q 50 20 75 35 L 65 65 Q 50 80 35 65 Z" fill="#FDBA74" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <circle cx="40" cy="45" r="2.5" fill="white"/><circle cx="60" cy="45" r="2.5" fill="white"/><circle cx="50" cy="60" r="2.5" fill="white"/>
+      </g>; break;
+    case 'food': 
+      inner = <g>
+        <path d="M 20 65 L 30 45 L 45 55 L 55 35 L 65 50 L 80 40 L 85 65 A 35 25 0 0 1 20 65 Z" fill="#FFF5F5" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <path d="M 30 60 Q 40 70 50 60 T 70 65" fill="none" stroke="#FCC19C" strokeWidth="4" strokeLinecap="round"/>
+        <path d="M 25 35 Q 40 15 55 30 Q 70 10 75 25 Z" fill="#FDE047" stroke={stroke} strokeWidth="5" strokeLinejoin="round" opacity="0.8"/>
+      </g>; break;
+    case 'organic': 
+      inner = <g>
+        <path d="M 15 40 C 15 80, 85 80, 85 40 Z" fill="#EF4444" stroke={stroke} strokeWidth="5"/>
+        <path d="M 15 40 C 15 80, 85 80, 85 40" fill="none" stroke="#22C55E" strokeWidth="10"/>
+        <path d="M 17 40 C 17 76, 83 76, 83 40" fill="none" stroke="#FFFFFF" strokeWidth="4"/>
+        <circle cx="35" cy="50" r="2.5" fill={stroke}/><circle cx="50" cy="60" r="2.5" fill={stroke}/><circle cx="65" cy="50" r="2.5" fill={stroke}/>
+      </g>; break;
+    case 'leaves': 
+      inner = <g>
+        <path d="M 50 15 C 65 25, 90 35, 80 50 C 100 60, 90 75, 75 75 C 80 95, 60 95, 50 85 C 40 95, 20 95, 25 75 C 10 75, 0 60, 20 50 C 10 35, 35 25, 50 15 Z" fill="#D97706" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <path d="M 50 85 L 50 20 M 50 65 L 70 55 M 50 45 L 35 35 M 50 75 L 30 70" stroke={stroke} strokeWidth="4" strokeLinecap="round"/>
+      </g>; break;
+    case 'grass': 
+      inner = <g>
+        <path d="M 20 85 Q 25 45 10 20 M 35 85 Q 40 35 35 10 M 50 85 Q 55 45 70 15 M 65 85 Q 75 35 85 20 M 80 85 Q 90 55 95 30" fill="none" stroke="#4ADE80" strokeWidth="8" strokeLinecap="round"/>
+        <path d="M 15 85 L 85 85" stroke={stroke} strokeWidth="8" strokeLinecap="round"/>
+      </g>; break;
+    case 'carrot': 
+      inner = <g>
+        <path d="M 35 30 C 45 40, 55 20, 65 30 L 58 80 C 55 90, 45 90, 42 80 Z" fill="#F97316" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <path d="M 50 30 L 40 10 M 50 30 L 50 5 M 50 30 L 60 10" stroke="#4ADE80" strokeWidth="6" strokeLinecap="round"/>
+        <path d="M 40 50 L 50 50 M 55 65 L 45 65" stroke={stroke} strokeWidth="3" strokeLinecap="round"/>
+      </g>; break;
+    case 'bottle': 
+      inner = <g>
+        <path d="M 40 35 L 40 85 C 40 90, 60 90, 60 85 L 60 35 C 60 30, 55 25, 55 20 L 55 10 L 45 10 L 45 20 C 45 25, 40 30, 40 35 Z" fill="#BAE6FD" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <rect x="40" y="50" width="20" height="15" fill="#FFFFFF" stroke={stroke} strokeWidth="5"/>
+        <line x1="45" y1="10" x2="55" y2="10" stroke={stroke} strokeWidth="6" strokeLinecap="round"/>
+        <line x1="43" y1="35" x2="57" y2="35" stroke={stroke} strokeWidth="3" opacity="0.5"/>
+      </g>; break;
+    case 'jug': 
+      inner = <g>
+        <path d="M 30 40 L 30 85 C 30 90, 70 90, 70 85 L 70 40 C 70 30, 60 25, 60 20 L 60 10 L 40 10 L 40 20 C 40 25, 30 30, 30 40 Z" fill="#F0F9FF" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <path d="M 70 45 C 85 45, 85 70, 70 70" fill="none" stroke={stroke} strokeWidth="6" strokeLinecap="round"/>
+        <rect x="42" y="5" width="16" height="6" fill="#EF4444" stroke={stroke} strokeWidth="4"/>
+        <circle cx="50" cy="55" r="10" fill="#60A5FA" stroke={stroke} strokeWidth="4"/>
+      </g>; break;
+    case 'jar':
+      inner = <g>
+        <path d="M 30 35 L 30 80 C 30 90, 70 90, 70 80 L 70 35 Z" fill="#CCFBF1" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <rect x="25" y="20" width="50" height="15" rx="3" fill="#9CA3AF" stroke={stroke} strokeWidth="5"/>
+        <path d="M 38 45 L 38 70" stroke="#FFFFFF" strokeWidth="4" strokeLinecap="round" opacity="0.8"/>
+      </g>; break;
+    case 'glassbottle':
+      inner = <g>
+        <path d="M 35 50 L 35 85 C 35 95, 65 95, 65 85 L 65 50 L 55 35 L 55 15 L 45 15 L 45 35 Z" fill="#A7F3D0" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <rect x="42" y="10" width="16" height="5" fill="#10B981" stroke={stroke} strokeWidth="5"/>
+        <path d="M 42 60 L 42 80" stroke="#FFFFFF" strokeWidth="4" strokeLinecap="round" opacity="0.8"/>
+      </g>; break;
+    case 'box': 
+      inner = <g>
+        <polygon points="30,35 70,35 60,45 40,45" fill="#B45309" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <polygon points="30,35 20,20 40,25 40,45" fill="#F59E0B" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <polygon points="70,35 80,20 60,25 60,45" fill="#F59E0B" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <rect x="30" y="45" width="40" height="40" fill="#FBBF24" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <polygon points="30,45 70,45 60,60 40,60" fill="#F59E0B" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <line x1="50" y1="60" x2="50" y2="85" stroke="#FDE047" strokeWidth="6"/>
+        <line x1="50" y1="60" x2="50" y2="85" stroke={stroke} strokeWidth="2" strokeDasharray="4 4"/>
+      </g>; break;
+    case 'carton':
+      inner = <g>
+        <path d="M 30 40 L 50 20 L 70 40 L 70 85 L 30 85 Z" fill="#E0F2FE" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <path d="M 30 40 L 70 40" stroke={stroke} strokeWidth="5"/>
+        <path d="M 50 20 L 50 40" stroke={stroke} strokeWidth="5"/>
+        <rect x="40" y="55" width="20" height="15" fill="#38BDF8" stroke={stroke} strokeWidth="4"/>
+      </g>; break;
+    case 'can': 
+      inner = <g>
+        <path d="M 35 25 L 65 25 L 65 75 C 65 85, 35 85, 35 75 Z" fill="#D1D5DB" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <ellipse cx="50" cy="25" rx="15" ry="6" fill="#E5E7EB" stroke={stroke} strokeWidth="5"/>
+        <ellipse cx="50" cy="25" rx="6" ry="3" fill="#9CA3AF" stroke={stroke} strokeWidth="3"/>
+        <rect x="35" y="40" width="30" height="25" fill="#3B82F6" stroke={stroke} strokeWidth="5"/>
+        <path d="M 45 45 L 55 55 M 55 45 L 45 55" stroke="#FFFFFF" strokeWidth="3" strokeLinecap="round"/>
+      </g>; break;
+    case 'paintcan':
+      inner = <g>
+        <path d="M 30 35 L 30 80 C 30 90, 70 90, 70 80 L 70 35 Z" fill="#D1D5DB" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <ellipse cx="50" cy="35" rx="20" ry="8" fill="#9CA3AF" stroke={stroke} strokeWidth="5"/>
+        <path d="M 30 50 L 70 50 L 70 80 C 70 90, 30 90, 30 80 Z" fill="#EF4444"/>
+        <path d="M 30 50 L 70 50 L 70 80 C 70 90, 30 90, 30 80 Z" fill="none" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <path d="M 40 50 L 40 65 A 5 5 0 0 0 50 65 L 50 50" fill="#EF4444" stroke={stroke} strokeWidth="4"/>
+        <path d="M 25 40 Q 50 10 75 40" fill="none" stroke={stroke} strokeWidth="4"/> 
+      </g>; break;
+    case 'paper': 
+      inner = <g>
+        <rect x="25" y="30" width="50" height="40" rx="2" fill="#FFFFFF" stroke={stroke} strokeWidth="5" transform="rotate(-10 50 50)"/>
+        <rect x="25" y="30" width="50" height="40" rx="2" fill="#F3F4F6" stroke={stroke} strokeWidth="5" transform="rotate(10 50 50)"/>
+        <circle cx="60" cy="45" r="5" fill="#EF4444" stroke={stroke} strokeWidth="2" transform="rotate(10 50 50)"/>
+        <line x1="35" y1="45" x2="50" y2="45" stroke={stroke} strokeWidth="3" strokeLinecap="round" transform="rotate(10 50 50)"/>
+        <line x1="35" y1="55" x2="65" y2="55" stroke={stroke} strokeWidth="3" strokeLinecap="round" transform="rotate(10 50 50)"/>
+      </g>; break;
+    case 'bubblewrap':
+      inner = <g>
+        <rect x="20" y="20" width="60" height="60" rx="10" fill="#E0F2FE" stroke={stroke} strokeWidth="5"/>
+        <circle cx="35" cy="35" r="8" fill="#BAE6FD" stroke={stroke} strokeWidth="3"/>
+        <circle cx="65" cy="35" r="8" fill="#BAE6FD" stroke={stroke} strokeWidth="3"/>
+        <circle cx="35" cy="65" r="8" fill="#BAE6FD" stroke={stroke} strokeWidth="3"/>
+        <circle cx="65" cy="65" r="8" fill="#BAE6FD" stroke={stroke} strokeWidth="3"/>
+        <circle cx="50" cy="50" r="8" fill="#BAE6FD" stroke={stroke} strokeWidth="3"/>
+      </g>; break;
+    case 'wrapper': 
+      inner = <g>
+        <path d="M 40 50 L 20 30 L 20 70 Z" fill="#A78BFA" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <path d="M 60 50 L 80 30 L 80 70 Z" fill="#A78BFA" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <ellipse cx="50" cy="50" rx="15" ry="12" fill="#C084FC" stroke={stroke} strokeWidth="5"/>
+        <path d="M 45 48 C 50 45, 55 55, 50 50" stroke={stroke} strokeWidth="3" fill="none" strokeLinecap="round"/>
+      </g>; break;
+    case 'cup': 
+      inner = <g>
+        <path d="M 25 30 L 75 30 L 65 85 C 65 90, 35 90, 35 85 Z" fill="#FFFFFF" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <ellipse cx="50" cy="30" rx="25" ry="8" fill="#F3F4F6" stroke={stroke} strokeWidth="5"/>
+        <path d="M 45 40 L 50 55 L 40 65 L 45 80" fill="none" stroke={stroke} strokeWidth="3" strokeLinecap="round"/>
+      </g>; break;
+    case 'straw': 
+      inner = <g>
+        <path d="M 30 85 L 50 40 L 75 35" fill="none" stroke={stroke} strokeWidth="16" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M 30 85 L 50 40 L 75 35" fill="none" stroke="#FFFFFF" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M 30 85 L 50 40 L 75 35" fill="none" stroke="#EF4444" strokeWidth="10" strokeDasharray="15 15" strokeLinecap="round" strokeLinejoin="round"/>
+      </g>; break;
+    case 'tissue': 
+      inner = <g>
+        <path d="M 40 25 C 20 20, 15 50, 25 65 C 10 80, 40 95, 55 85 C 75 95, 90 75, 80 55 C 90 35, 65 15, 50 25 C 45 15, 30 15, 40 25 Z" fill="#FFFFFF" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <path d="M 35 40 Q 50 50 60 35 M 30 65 Q 45 55 55 70 M 65 50 Q 75 60 80 50" fill="none" stroke={stroke} strokeWidth="3" opacity="0.4" strokeLinecap="round"/>
+      </g>; break;
+    case 'toy': 
+      inner = <g>
+        <circle cx="35" cy="30" r="10" fill="#D97706" stroke={stroke} strokeWidth="5"/>
+        <path d="M 65 30 L 75 20 M 70 30 L 80 25" stroke={stroke} strokeWidth="4" strokeLinecap="round"/>
+        <circle cx="50" cy="45" r="22" fill="#F59E0B" stroke={stroke} strokeWidth="5"/>
+        <ellipse cx="50" cy="53" rx="10" ry="7" fill="#FEF3C7" stroke={stroke} strokeWidth="4"/>
+        <circle cx="50" cy="50" r="3" fill={stroke}/>
+        <circle cx="40" cy="40" r="3" fill={stroke}/>
+        <path d="M 57 37 L 63 43 M 63 37 L 57 43" stroke={stroke} strokeWidth="3" strokeLinecap="round"/>
+        <path d="M 45 65 C 30 85, 70 85, 55 65" fill="#FFFFFF" stroke={stroke} strokeWidth="4"/>
+      </g>; break;
+    case 'bag': 
+      inner = <g>
+        <polygon points="25,20 30,10 35,20 40,10 45,20 50,10 55,20 60,10 65,20 70,10 75,20 70,90 30,90" fill="#EF4444" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <ellipse cx="50" cy="55" rx="15" ry="10" fill="#FDE047" stroke={stroke} strokeWidth="5"/>
+        <path d="M 35 35 L 65 35 M 30 75 L 70 75" stroke={stroke} strokeWidth="4" opacity="0.5" strokeLinecap="round"/>
+      </g>; break;
+    case 'ceramic':
+      inner = <g>
+        <path d="M 15 50 C 15 25, 85 25, 85 50 C 85 65, 65 75, 50 70 L 45 50 L 30 65 C 20 60, 15 55, 15 50 Z" fill="#FFFFFF" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <path d="M 25 50 Q 50 45 75 50" fill="none" stroke="#E5E7EB" strokeWidth="4"/>
+        <circle cx="50" cy="50" r="15" fill="none" stroke="#E5E7EB" strokeWidth="3"/>
+      </g>; break;
+    case 'battery': 
+      inner = <g>
+        <rect x="30" y="25" width="40" height="60" rx="4" fill="#10B981" stroke={stroke} strokeWidth="5"/>
+        <rect x="40" y="15" width="20" height="10" rx="2" fill="#9CA3AF" stroke={stroke} strokeWidth="5"/>
+        <path d="M 30 45 L 70 45 M 30 65 L 70 65" stroke={stroke} strokeWidth="4"/>
+        <polygon points="45,40 55,40 48,55 60,55 45,75 50,55 38,55" fill="#FDE047" stroke={stroke} strokeWidth="3" strokeLinejoin="round"/>
+      </g>; break;
+    case 'lightbulb': 
+      inner = <g>
+        <path d="M 50 15 C 30 15, 30 50, 40 60 L 40 75 L 60 75 L 60 60 C 70 50, 70 15, 50 15 Z" fill="#FEF08A" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <rect x="42" y="75" width="16" height="15" rx="3" fill="#D1D5DB" stroke={stroke} strokeWidth="5"/>
+        <line x1="42" y1="80" x2="58" y2="80" stroke={stroke} strokeWidth="4"/>
+        <line x1="42" y1="85" x2="58" y2="85" stroke={stroke} strokeWidth="4"/>
+        <path d="M 45 60 L 45 40 M 55 60 L 55 40 M 45 40 L 50 30 L 55 40" fill="none" stroke={stroke} strokeWidth="3" strokeLinejoin="round"/>
+        <path d="M 35 30 L 45 40 L 40 50" fill="none" stroke={stroke} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+      </g>; break;
+    case 'tech': 
+      inner = <g>
+        <rect x="25" y="10" width="50" height="80" rx="6" fill="#4B5563" stroke={stroke} strokeWidth="5"/>
+        <rect x="30" y="20" width="40" height="55" rx="2" fill="#1F2937" stroke={stroke} strokeWidth="4"/>
+        <circle cx="50" cy="83" r="4" fill="#9CA3AF" stroke={stroke} strokeWidth="3"/>
+        <path d="M 30 35 L 45 45 L 70 30 M 45 45 L 40 65 M 45 45 L 65 60" fill="none" stroke="#9CA3AF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </g>; break;
+    case 'laptop':
+      inner = <g>
+        <rect x="20" y="30" width="60" height="40" rx="4" fill="#4B5563" stroke={stroke} strokeWidth="5"/>
+        <rect x="25" y="35" width="50" height="30" fill="#1F2937" stroke={stroke} strokeWidth="4"/>
+        <polygon points="10,80 90,80 80,70 20,70" fill="#9CA3AF" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <path d="M 25 45 L 40 55 M 35 35 L 40 55 M 40 55 L 60 45" fill="none" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      </g>; break;
+    case 'cartridge':
+      inner = <g>
+        <rect x="30" y="20" width="40" height="50" fill="#374151" stroke={stroke} strokeWidth="5"/>
+        <path d="M 30 70 L 70 70 L 65 85 L 35 85 Z" fill="#1F2937" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <rect x="35" y="30" width="30" height="20" fill="#60A5FA" stroke={stroke} strokeWidth="4"/>
+        <circle cx="50" cy="40" r="5" fill="#3B82F6"/>
+      </g>; break;
+    case 'controller': 
+      inner = <g>
+        <path d="M 15 45 C 5 30, 25 15, 40 30 L 60 30 C 75 15, 95 30, 85 45 L 85 65 C 85 75, 75 80, 70 70 L 60 60 L 40 60 L 30 70 C 25 80, 15 75, 15 65 Z" fill="#D1D5DB" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <path d="M 25 42 L 31 42 L 31 36 L 37 36 L 37 42 L 43 42 L 43 48 L 37 48 L 37 54 L 31 54 L 31 48 L 25 48 Z" fill="#4B5563" stroke={stroke} strokeWidth="3" strokeLinejoin="round"/>
+        <circle cx="68" cy="38" r="5" fill="#EF4444" stroke={stroke} strokeWidth="3"/>
+        <circle cx="78" cy="46" r="5" fill="#3B82F6" stroke={stroke} strokeWidth="3"/>
+        <path d="M 50 30 L 50 10 C 55 5, 65 10, 70 5" fill="none" stroke={stroke} strokeWidth="4" strokeLinecap="round"/>
+      </g>; break;
+    case 'cord': 
+      inner = <g>
+        <path d="M 20 20 C -10 40, 30 70, 50 50 C 70 30, 100 60, 70 80 C 40 100, 10 70, 40 60 C 70 50, 60 10, 80 20" fill="none" stroke={stroke} strokeWidth="5" strokeLinecap="round"/>
+        <rect x="75" y="15" width="12" height="18" fill="#9CA3AF" stroke={stroke} strokeWidth="4" transform="rotate(30 80 20)"/>
+        <line x1="85" y1="10" x2="90" y2="5" stroke={stroke} strokeWidth="4" strokeLinecap="round"/>
+        <line x1="15" y1="15" x2="20" y2="20" stroke={stroke} strokeWidth="4" strokeLinecap="round"/>
+      </g>; break;
+    case 'remote':
+      inner = <g>
+        <rect x="35" y="10" width="30" height="80" rx="8" fill="#4B5563" stroke={stroke} strokeWidth="5"/>
+        <circle cx="50" cy="25" r="5" fill="#EF4444" stroke={stroke} strokeWidth="3"/>
+        <rect x="42" y="40" width="16" height="6" fill="#9CA3AF" stroke={stroke} strokeWidth="3"/>
+        <rect x="42" y="55" width="16" height="6" fill="#9CA3AF" stroke={stroke} strokeWidth="3"/>
+        <rect x="42" y="70" width="16" height="6" fill="#9CA3AF" stroke={stroke} strokeWidth="3"/>
+      </g>; break;
+    case 'fork': 
+      inner = <g>
+        <path d="M 50 45 L 50 90" stroke={stroke} strokeWidth="6" strokeLinecap="round"/>
+        <path d="M 35 20 L 35 45 C 35 60, 65 60, 65 45 L 65 20" fill="none" stroke={stroke} strokeWidth="6" strokeLinecap="round"/>
+        <line x1="45" y1="20" x2="45" y2="50" stroke={stroke} strokeWidth="6" strokeLinecap="round"/>
+        <line x1="55" y1="35" x2="55" y2="50" stroke={stroke} strokeWidth="6" strokeLinecap="round"/>
+      </g>; break;
+    case 'watch': 
+      inner = <g>
+        <path d="M 35 15 L 65 15 L 60 30 L 40 30 Z" fill="#4B5563" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <path d="M 40 70 L 60 70 L 65 85 L 35 85 Z" fill="#4B5563" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <rect x="25" y="30" width="50" height="40" rx="10" fill="#1F2937" stroke={stroke} strokeWidth="5"/>
+        <path d="M 25 40 L 45 50 L 40 70 M 45 50 L 70 45" fill="none" stroke="#9CA3AF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </g>; break;
+    case 'coffee': 
+      inner = <g>
+        <path d="M 20 40 L 60 20 L 75 50 L 35 70 Z" fill="#FFFFFF" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <ellipse cx="67" cy="35" rx="15" ry="5" fill="#E5E7EB" stroke={stroke} strokeWidth="5" transform="rotate(26 67 35)"/>
+        <path d="M 35 60 C 20 60, 10 75, 25 85 C 40 95, 70 90, 80 80 C 90 70, 70 65, 60 65 C 50 65, 45 60, 35 60 Z" fill="#7C2D12" stroke={stroke} strokeWidth="5" strokeLinejoin="round"/>
+        <circle cx="20" cy="70" r="3" fill="#7C2D12" stroke={stroke} strokeWidth="2"/>
+        <circle cx="85" cy="75" r="4" fill="#7C2D12" stroke={stroke} strokeWidth="2"/>
+      </g>; break;
+    default: 
+      inner = <g>
+        <path d="M 30 30 Q 50 15 70 30 Q 85 50 70 70 Q 50 85 30 70 Q 15 50 30 30" fill="#9CA3AF" stroke={stroke} strokeWidth="6" strokeLinejoin="round"/>
+        <path d="M 40 40 L 60 60 M 60 40 L 40 60" stroke={stroke} strokeWidth="6" strokeLinecap="round"/>
+      </g>;
   }
   return <svg width={size} height={size} viewBox="0 0 100 100" style={{overflow:'visible', filter:`drop-shadow(0 4px 0 ${BORDER_COLOR})` }}>{inner}</svg>;
 }
