@@ -21,19 +21,20 @@
     width: 100%; 
     height: 100%; 
     overflow: hidden; 
-    overscroll-behavior: none; /* Prevents pull-to-refresh & swipe navigation on mobile */
     background: #38BDF8; 
     font-family: 'Fredoka', sans-serif;
+    font-size: 16px;
   }
 
   /* ─── Animations ─── */
   @keyframes bounce       { 0%,100%{transform:translateY(0) scale(1)} 45%{transform:translateY(-10px) scale(1.05)} }
   @keyframes itemDrop     { 0%{opacity:0;transform:translateY(-30px) scale(0.8)} 100%{opacity:1;transform:translateY(0) scale(1)} }
-  @keyframes wrongShake   { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
+  @keyframes wrongShake   { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-10px)} 40%{transform:translateX(10px)} 60%{transform:translateX(-8px)} 80%{transform:translateX(8px)} }
   @keyframes correctPop   { 0%{transform:scale(1)} 50%{transform:scale(1.15)} 100%{transform:scale(1)} }
-  @keyframes cloudDrift   { 0%{transform:translateX(-150px)} 100%{transform:translateX(100vw)} }
+  @keyframes cloudDrift   { 0%{transform:translateX(-200px)} 100%{transform:translateX(100vw)} }
   @keyframes birdFlight   { 0%{transform:translateX(110vw) translateY(0)} 100%{transform:translateX(-20vw) translateY(0)} }
   @keyframes screenIn     { from{opacity:0;transform:scale(0.98)} to{opacity:1;transform:scale(1)} }
+  @keyframes confettiFall { 0%{transform:translateY(-20px) rotate(0);opacity:1} 100%{transform:translateY(100vh) rotate(720deg);opacity:0} }
 
   .btn-cartoony {
     font-family: 'Fredoka', sans-serif;
@@ -41,12 +42,13 @@
     cursor: pointer;
     border: 4px solid #1C1C1C;
     border-radius: 99px;
-    transition: transform 0.1s ease, border-bottom-width 0.1s ease;
+    transition: transform 0.1s ease;
     box-shadow: 0 6px 0 #1C1C1C;
     display: flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
+    user-select: none;
   }
   .btn-cartoony:active {
     transform: translateY(4px);
@@ -58,14 +60,18 @@
   }
 
   .game-container {
-    max-width: 500px;
-    margin: 0 auto;
+    width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
     position: relative;
-    padding: 10px;
+    padding: 20px;
+    /* Removed max-width to make it full screen */
   }
+
+  .scroll-area::-webkit-scrollbar { width: 8px; }
+  .scroll-area::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+  .scroll-area::-webkit-scrollbar-thumb { background: #888; border-radius: 10px; }
 </style>
 </head>
 <body>
@@ -89,29 +95,57 @@ const ALL_ITEMS = [
   {id:2,  type:'banana', name:'Banana Peel',     bin:'compost',fact:'Banana peels are packed with potassium — worms love them!'},
   {id:3,  type:'orange', name:'Orange Peel',     bin:'compost',fact:'Citrus peels slowly break down and become plant food!'},
   {id:4,  type:'food',   name:'Egg Shells',      bin:'compost',fact:'Egg shells give calcium to soil, making veggies stronger!'},
+  {id:5,  type:'organic',name:'Coffee Grounds',  bin:'compost',fact:'Coffee grounds are like vitamins for garden soil!'},
+  {id:6,  type:'organic',name:'Dead Leaves',     bin:'compost',fact:'Fallen leaves turn into fluffy, rich compost in months!'},
+  {id:7,  type:'organic',name:'Grass Clippings', bin:'compost',fact:'Grass clippings break down super fast and feed your lawn!'},
+  {id:8,  type:'carrot', name:'Carrot Scraps',   bin:'compost',fact:'Carrot tops and peelings are perfect food for compost worms!'},
+  {id:9,  type:'food',   name:'Cooked Pasta',    bin:'compost',fact:'Leftover pasta becomes food for billions of tiny soil creatures!'},
+  {id:10, type:'food',   name:'Veggie Scraps',   bin:'compost',fact:'Vegetable scraps turn into garden gold in just a few weeks!'},
   {id:11, type:'bottle', name:'Plastic Bottle',  bin:'recycle',fact:'One plastic bottle can become stuffing for a winter jacket!'},
   {id:12, type:'jug',    name:'Plastic Jug',     bin:'recycle',fact:'Plastic jugs get melted down into park benches and toys!'},
+  {id:13, type:'bottle', name:'Glass Jar',       bin:'recycle',fact:'Glass can be recycled forever — it never wears out!'},
   {id:14, type:'can',    name:'Aluminum Can',    bin:'recycle',fact:'Recycling one can saves enough energy to run a TV for 3 hours!'},
   {id:15, type:'box',    name:'Cardboard Box',   bin:'recycle',fact:'Cardboard breaks down and becomes brand new boxes!'},
+  {id:16, type:'box',    name:'Milk Carton',     bin:'recycle',fact:'Milk cartons get turned into paper towels and tissue!'},
+  {id:17, type:'bottle', name:'Glass Bottle',    bin:'recycle',fact:'A recycled glass bottle uses 40% less energy to make!'},
+  {id:18, type:'paper',  name:'Magazine',        bin:'recycle',fact:'Magazines get shredded and turned into new paper products!'},
+  {id:19, type:'box',    name:'Juice Box',       bin:'recycle',fact:'Juice boxes can be recycled into roof tiles and flooring!'},
+  {id:20, type:'box',    name:'Cereal Box',      bin:'recycle',fact:'Cereal boxes are made of clean paperboard, which is easy to recycle!'},
   {id:21, type:'wrapper',name:'Bubble Wrap',     bin:'trash',  fact:'Bubble wrap gets tangled in recycling machines! Put it in the trash.'},
   {id:22, type:'cup',    name:'Styrofoam Cup',   bin:'trash',  fact:'Styrofoam lasts 500 years! It belongs in the trash.'},
+  {id:23, type:'trash',  name:'Used Tissue',     bin:'trash',  fact:'Used tissues carry germs, so they always go in the trash!'},
+  {id:24, type:'trash',  name:'Plastic Straw',   bin:'trash',  fact:'Straws are too small for recycling machines!'},
   {id:25, type:'bag',    name:'Chip Bag',        bin:'trash',  fact:'Chip bags mix plastic and foil — they can\'t be recycled!'},
+  {id:26, type:'wrapper',name:'Candy Wrapper',   bin:'trash',  fact:'Candy wrappers use mixed materials that can\'t be separated.'},
+  {id:27, type:'trash',  name:'Broken Toy',      bin:'trash',  fact:'Toys are made of mixed plastics that normal centers can\'t melt down!'},
+  {id:28, type:'trash',  name:'Broken Ceramic',  bin:'trash',  fact:'Broken ceramics can\'t be melted with glass — different materials!'},
   {id:29, type:'battery',name:'Battery',         bin:'special',fact:'Batteries have toxic chemicals. Never put them in regular trash!'},
   {id:30, type:'tech',   name:'Old Phone',       bin:'special',fact:'Phones have gold and rare metals inside. Recycle them as e-waste!'},
+  {id:31, type:'tech',   name:'Old Laptop',      bin:'special',fact:'Laptops have valuable metals — always e-waste recycle!'},
+  {id:32, type:'battery',name:'CFL Bulb',        bin:'special',fact:'CFL bulbs contain a tiny amount of mercury that needs careful disposal!'},
+  {id:33, type:'tech',   name:'Ink Cartridge',   bin:'special',fact:'Ink cartridges can be refilled! Many stores take them back for free!'},
+  {id:34, type:'can',    name:'Paint Can',       bin:'special',fact:'Old paint is hazardous waste — it needs special collection!'},
   {id:35, type:'cord',   name:'Old Charger',     bin:'special',fact:'Cables contain copper! Take them to an e-waste bin.'},
   {id:36, type:'tech',   name:'Broken Tablet',   bin:'special',fact:'Tablets contain toxic batteries. They need special e-waste care!'},
-  {id:40, type:'fork',   name:'Plastic Fork',    bin:'trash',  fact:'Small plastic items like forks often can\'t be recycled.'},
+  {id:37, type:'controller', name:'Game Controller', bin:'special',fact:'Old controllers have complex circuit boards that are e-waste!'},
+  {id:38, type:'cord',       name:'Tangled Earbuds', bin:'special',fact:'Earbuds contain tiny valuable wires recovered at e-waste centers!'},
+  {id:39, type:'tech',       name:'TV Remote',       bin:'special',fact:'Remotes are e-waste! Take the batteries out first!'},
+  {id:40, type:'fork',       name:'Plastic Fork',    bin:'trash',  fact:'Small plastic items like forks often can\'t be recycled.'},
+  {id:41, type:'organic',    name:'Watermelon Rind', bin:'compost',fact:'Watermelon rinds are great for compost!'},
+  {id:42, type:'paper',      name:'Junk Mail',       bin:'recycle',fact:'Most junk mail can easily be recycled into brand new paper!'},
+  {id:43, type:'watch',      name:'Smartwatch',      bin:'special',fact:'Smartwatches are tiny computers! They are e-waste.'},
 ];
 
 const LEVELS = [
   { id:1, name:'Easy Peasy', subtitle:'The Basics', icon:'compost', color:'#4ADE80', 
-    bins:['recycle','compost','trash'], timePerItem:10, itemCount: 6,
-    itemPool:[1,2,11,14,22,40] },
-  { id:2, name:'Going Green', subtitle:'Sorting Master', icon:'recycle', color:'#60A5FA', 
-    bins:['recycle','compost','trash','special'], timePerItem:8, itemCount: 10,
-    itemPool:[1,2,3,4,11,12,14,15,21,22,25,29,30,40] },
-  { id:3, name:'Hero Sorter!', subtitle:'Earth Day Pro', icon:'star', color:'#FBBF24', 
-    bins:['recycle','compost','trash','special'], timePerItem:6, itemCount: 15,
+    bins:['recycle','compost','trash','special'], /* Restored special bin for Level 1 */
+    timePerItem:10, itemCount: 10,
+    itemPool:[1,2,3,11,13,14,15,22,23,24,29,32,40,41,42] },
+  { id:2, name:'Getting Warmer', subtitle:'E-Waste Master', icon:'special', color:'#FBBF24', 
+    bins:['recycle','compost','trash','special'], timePerItem:8, itemCount: 15,
+    itemPool:[4,5,6,12,16,21,25,26,29,30,35,36,37,38,39,43] },
+  { id:3, name:'Hero Sorter!', subtitle:'Earth Day Pro', icon:'star', color:'#60A5FA', 
+    bins:['recycle','compost','trash','special'], timePerItem:6, itemCount: 20,
     itemPool:Array.from({length:ALL_ITEMS.length}, (_,i)=>ALL_ITEMS[i].id) },
 ];
 
@@ -119,7 +153,6 @@ function BinIcon({ type, size=40, color="white" }) {
   const stroke = BORDER_COLOR;
   const symbolFill = color === 'white' ? stroke : 'white';
   const binColor = color === 'white' ? '#FFFFFF' : color;
-
   return (
     <svg width={size} height={size} viewBox="0 0 100 100" style={{overflow:'visible', filter: `drop-shadow(0 3px 0 ${BORDER_COLOR})`}}>
       <path d="M 25 30 L 75 30 L 65 90 L 35 90 Z" fill={binColor} stroke={stroke} strokeWidth="6" strokeLinejoin="round" />
@@ -132,29 +165,6 @@ function BinIcon({ type, size=40, color="white" }) {
   );
 }
 
-function UIcon({ name, size=24, color="white" }) {
-  const stroke = BORDER_COLOR;
-  if (name === 'star') return (
-    <svg width={size} height={size} viewBox="0 0 100 100" style={{overflow:'visible', filter: `drop-shadow(0 2px 0 ${BORDER_COLOR})`}}>
-      <path d="M 50 10 L 62 35 L 90 40 L 70 60 L 75 88 L 50 75 L 25 88 L 30 60 L 10 40 L 38 35 Z" fill={color} stroke={stroke} strokeWidth="6" strokeLinejoin="round"/>
-    </svg>
-  );
-  if (name === 'clock') return (
-    <svg width={size} height={size} viewBox="0 0 100 100" style={{overflow:'visible'}}>
-      <circle cx="50" cy="50" r="40" fill={color} stroke={stroke} strokeWidth="6"/>
-      <path d="M 50 25 L 50 50 L 65 65" fill="none" stroke={stroke} strokeWidth="6" strokeLinecap="round"/>
-    </svg>
-  );
-  if (name === 'box') return (
-    <svg width={size} height={size} viewBox="0 0 100 100" style={{overflow:'visible'}}>
-      <path d="M 20 40 L 50 55 L 80 40 L 80 75 L 50 90 L 20 75 Z" fill={color} stroke={stroke} strokeWidth="6" strokeLinejoin="round"/>
-      <path d="M 20 40 L 50 25 L 80 40 L 50 55 Z" fill={color} stroke={stroke} strokeWidth="6" strokeLinejoin="round"/>
-      <line x1="50" y1="55" x2="50" y2="90" stroke={stroke} strokeWidth="6"/>
-    </svg>
-  );
-  return null;
-}
-
 function ItemIcon({ type, size=80 }) {
   const stroke = BORDER_COLOR;
   let inner = null;
@@ -164,28 +174,16 @@ function ItemIcon({ type, size=80 }) {
     case 'bottle': inner = <g><path d="M 35 40 L 35 90 C 35 95, 65 95, 65 90 L 65 40 Q 65 25 55 20 L 55 10 L 45 10 L 45 20 Q 35 25 35 40 Z" fill="#93C5FD" stroke={stroke} strokeWidth="6"/><rect x="35" y="55" width="30" height="20" fill="white" stroke={stroke} strokeWidth="4"/></g>; break;
     case 'battery': inner = <g><rect x="30" y="25" width="40" height="65" rx="5" fill="#10B981" stroke={stroke} strokeWidth="6"/><path d="M 40 25 L 40 15 L 60 15 L 60 25" fill="#374151" stroke={stroke} strokeWidth="6"/></g>; break;
     case 'tech': inner = <g><rect x="25" y="15" width="50" height="75" rx="8" fill="#374151" stroke={stroke} strokeWidth="6"/><rect x="32" y="25" width="36" height="45" rx="2" fill="#93C5FD" stroke={stroke} strokeWidth="4"/></g>; break;
+    case 'controller': inner = <g><path d="M 20 45 Q 20 30 35 30 L 65 30 Q 80 30 80 45 L 85 65 Q 85 75 75 75 Q 65 75 60 65 L 50 60 L 40 65 Q 35 75 25 75 Q 15 75 15 65 Z" fill="#D1D5DB" stroke={stroke} strokeWidth="6" strokeLinejoin="round"/><circle cx="32" cy="45" r="6" fill="#9CA3AF" stroke={stroke} strokeWidth="4"/></g>; break;
     case 'can': inner = <g><path d="M 25 25 L 25 75 C 25 85, 75 85, 75 75 L 75 25 Z" fill="#D1D5DB" stroke={stroke} strokeWidth="6"/><ellipse cx="50" cy="25" rx="25" ry="8" fill="#E5E7EB" stroke={stroke} strokeWidth="6"/></g>; break;
     default: inner = <circle cx="50" cy="50" r="35" fill="#E5E7EB" stroke={stroke} strokeWidth="6"/>;
   }
   return <svg width={size} height={size} viewBox="0 0 100 100" style={{overflow:'visible', filter:`drop-shadow(0 4px 0 ${BORDER_COLOR})` }}>{inner}</svg>;
 }
 
-function Background() {
-  return (
-    <div className="clouds-bg">
-      <svg style={{position:'absolute', top:'15%', animation:'cloudDrift 20s linear infinite', filter:'drop-shadow(0 4px 0 rgba(0,0,0,0.1))'}} width="120" height="60" viewBox="0 0 120 60"><path d="M40 20 Q50 0 70 10 Q90 0 100 20 Q120 20 110 40 Q90 50 60 50 Q30 50 10 30 Z" fill="white" stroke={BORDER_COLOR} strokeWidth="4"/></svg>
-      <svg style={{position:'absolute', top:'50%', animation:'cloudDrift 30s linear 5s infinite backwards', filter:'drop-shadow(0 4px 0 rgba(0,0,0,0.1))'}} width="160" height="80" viewBox="0 0 120 60"><path d="M40 20 Q50 0 70 10 Q90 0 100 20 Q120 20 110 40 Q90 50 60 50 Q30 50 10 30 Z" fill="white" stroke={BORDER_COLOR} strokeWidth="4"/></svg>
-      <svg style={{position:'absolute', top:'25%', animation:'birdFlight 12s linear infinite', filter:'drop-shadow(0 2px 0 rgba(0,0,0,0.1))'}} width="40" height="40" viewBox="0 0 100 100">
-        <g transform="translate(100,0) scale(-1,1)"><ellipse cx="45" cy="50" rx="20" ry="12" fill="white" stroke={BORDER_COLOR} strokeWidth="6"/><path d="M 65 48 L 80 50 L 65 52 Z" fill="#FBBF24" stroke={BORDER_COLOR} strokeWidth="4"/><path fill="white" stroke={BORDER_COLOR} strokeWidth="5"><animate attributeName="d" dur="0.4s" repeatCount="indefinite" values="M 30 45 Q 15 10 50 15 Z; M 30 50 Q 50 40 70 40 Z; M 30 55 Q 15 90 50 85 Z" /></path></g>
-      </svg>
-    </div>
-  );
-}
-
 function Sun({ mood='happy', size=120 }) {
   const isSad = mood === 'sad';
   const isWorried = mood === 'worried';
-
   return (
     <svg width={size} height={size} viewBox="0 0 100 100" style={{filter: 'drop-shadow(0 8px 0 rgba(0,0,0,0.1))', overflow: 'visible'}}>
       <polygon points="50,5 60,25 85,15 75,40 95,50 75,60 85,85 60,75 50,95 40,75 15,85 25,60 5,50 25,40 15,15 40,25" fill="#F59E0B" stroke={BORDER_COLOR} strokeWidth="5" strokeLinejoin="round" />
@@ -212,19 +210,45 @@ function Sun({ mood='happy', size=120 }) {
           <circle cx="38" cy="42" r="2" fill="white"/>
           <circle cx="58" cy="42" r="2" fill="white"/>
           <g stroke="#F87171" strokeWidth="2.5" strokeLinecap="round" opacity="0.8">
-            <path d="M 30 52 L 33 49" />
-            <path d="M 67 52 L 70 49" />
+            <path d="M 30 52 L 33 49" /><path d="M 67 52 L 70 49" />
           </g>
         </g>
       )}
-      {isSad ? (
-         <path d="M 44 58 Q 50 48 56 58 Z" fill={BORDER_COLOR} stroke={BORDER_COLOR} strokeWidth="3.5" strokeLinejoin="round"/>
-      ) : isWorried ? (
-         <path d="M 44 55 Q 47 52 50 55 T 56 55" fill="none" stroke={BORDER_COLOR} strokeWidth="3.5" strokeLinecap="round"/>
-      ) : (
-         <path d="M 44 53 Q 50 62 56 53 Z" fill={BORDER_COLOR} stroke={BORDER_COLOR} strokeWidth="3.5" strokeLinejoin="round"/>
-      )}
+      <path d="M 44 53 Q 50 62 56 53 Z" fill={BORDER_COLOR} stroke={BORDER_COLOR} strokeWidth="3.5" strokeLinejoin="round"/>
     </svg>
+  );
+}
+
+function Confetti() {
+  const pieces = Array.from({length:28},(_,i) => ({
+    id:i, x:5+Math.random()*90,
+    color:['#3B82F6','#22C55E','#F59E0B','#EF4444','#8B5CF6','#EC4899'][i%6],
+    delay:Math.random()*0.5, size:8+Math.random()*10,
+  }));
+  return (
+    <div style={{position:'absolute',inset:0,pointerEvents:'none',overflow:'hidden',zIndex:200}}>
+      {pieces.map(p=>(
+        <div key={p.id} style={{
+          position:'absolute',left:`${p.x}%`,top:'-15px',
+          width:p.size,height:p.size,background:p.color,
+          border:`2px solid ${BORDER_COLOR}`,
+          borderRadius:'50%',
+          animation:`confettiFall 1.3s ${p.delay}s ease-in forwards`,
+        }}/>
+      ))}
+    </div>
+  );
+}
+
+function Background() {
+  return (
+    <div className="clouds-bg">
+      <svg style={{position:'absolute', top:'10%', animation:'cloudDrift 15s linear infinite', filter:'drop-shadow(0 4px 0 rgba(0,0,0,0.1))'}} width="120" height="60" viewBox="0 0 120 60"><path d="M40 20 Q50 0 70 10 Q90 0 100 20 Q120 20 110 40 Q90 50 60 50 Q30 50 10 30 Z" fill="white" stroke={BORDER_COLOR} strokeWidth="4"/></svg>
+      <svg style={{position:'absolute', top:'45%', animation:'cloudDrift 25s linear 5s infinite backwards', filter:'drop-shadow(0 4px 0 rgba(0,0,0,0.1))'}} width="160" height="80" viewBox="0 0 120 60"><path d="M40 20 Q50 0 70 10 Q90 0 100 20 Q120 20 110 40 Q90 50 60 50 Q30 50 10 30 Z" fill="white" stroke={BORDER_COLOR} strokeWidth="4"/></svg>
+      <svg style={{position:'absolute', top:'25%', animation:'birdFlight 18s linear infinite', filter:'drop-shadow(0 2px 0 rgba(0,0,0,0.1))'}} width="45" height="45" viewBox="0 0 100 100">
+        <g transform="translate(100,0) scale(-1,1)"><ellipse cx="45" cy="50" rx="22" ry="14" fill="white" stroke={BORDER_COLOR} strokeWidth="6"/><path d="M 65 48 L 80 50 L 65 52 Z" fill="#FBBF24" stroke={BORDER_COLOR} strokeWidth="4"/><path fill="white" stroke={BORDER_COLOR} strokeWidth="5"><animate attributeName="d" dur="0.4s" repeatCount="indefinite" values="M 30 45 Q 15 10 50 15 Z; M 30 50 Q 50 40 70 40 Z; M 30 55 Q 15 90 50 85 Z" /></path></g>
+      </svg>
+    </div>
   );
 }
 
@@ -234,7 +258,7 @@ function App() {
   const [score, setScore] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
 
-  const handleNext = (s, l) => {
+  const go = (s, l) => {
     if (l) setLevel(l);
     setScreen(s);
   };
@@ -242,12 +266,12 @@ function App() {
   return (
     <div className="game-container">
       <Background />
-      {screen === 'welcome' && <WelcomeScreen onStart={() => handleNext('tutorial')} onQuickStart={() => handleNext('intro', 1)} />}
-      {screen === 'tutorial' && <TutorialScreen onNext={() => handleNext('intro', 1)} />}
+      {screen === 'welcome' && <WelcomeScreen onStart={() => go('tutorial')} onQuickStart={() => go('intro', 1)} />}
+      {screen === 'tutorial' && <TutorialScreen onNext={() => go('intro', 1)} />}
       {screen === 'intro' && <LevelIntro level={level} onGo={() => setScreen('game')} />}
       {screen === 'game' && <Game level={level} onComplete={(s, t) => { setScore(s); setTotalItems(t); setScreen('results'); }} />}
-      {screen === 'results' && <ResultsScreen score={score} total={totalItems} level={level} onNext={() => level < 3 ? handleNext('intro', level + 1) : setScreen('final')} onReplay={() => setScreen('game')} />}
-      {screen === 'final' && <FinalScreen score={score} total={totalItems} onRestart={() => setScreen('welcome')} />}
+      {screen === 'results' && <ResultsScreen score={score} total={totalItems} level={level} onNext={() => level < 3 ? go('intro', level + 1) : setScreen('final')} onReplay={() => setScreen('game')} />}
+      {screen === 'final' && <FinalScreen score={score} total={totalItems} onRestart={() => go('welcome')} />}
     </div>
   );
 }
@@ -255,12 +279,12 @@ function App() {
 function WelcomeScreen({ onStart, onQuickStart }) {
   return (
     <div style={{flex:1, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', zIndex:10, animation:'screenIn 0.4s ease'}}>
-      <div style={{animation:'bounce 2s infinite'}}><Sun size={140} /></div>
-      <h1 style={{fontSize:'clamp(2.5rem, 10vw, 3.5rem)', textAlign:'center', color:'white', textShadow:`3px 3px 0 ${BORDER_COLOR}, -3px -3px 0 ${BORDER_COLOR}, 3px -3px 0 ${BORDER_COLOR}, -3px 3px 0 ${BORDER_COLOR}, 0 6px 0 ${BORDER_COLOR}`, margin:'20px 0', lineHeight:1.1}}>Sort It Out!</h1>
-      <p style={{background:'rgba(255,255,255,0.85)', padding:'10px 20px', borderRadius:'20px', border:`3px solid ${BORDER_COLOR}`, fontWeight:700, marginBottom:30, textAlign:'center', color:TEXT_DARK}}>Help the Sun sort trash into the right bins!</p>
-      <div style={{width:'100%', display:'flex', flexDirection:'column', gap:15}}>
-        <button className="btn-cartoony" onClick={onStart} style={{background:'#FBBF24', color:TEXT_DARK, padding:'15px', fontSize:'1.2rem'}}>How to Play</button>
-        <button className="btn-cartoony" onClick={onQuickStart} style={{background:'#4ADE80', color:TEXT_DARK, padding:'15px', fontSize:'1.2rem'}}>Start Game</button>
+      <div style={{animation:'bounce 2s infinite'}}><Sun size={150} /></div>
+      <h1 style={{fontSize:'clamp(3rem, 10vw, 4rem)', textAlign:'center', color:'white', textShadow:`3px 3px 0 ${BORDER_COLOR}, -3px -3px 0 ${BORDER_COLOR}, 3px -3px 0 ${BORDER_COLOR}, -3px 3px 0 ${BORDER_COLOR}, 0 6px 0 ${BORDER_COLOR}`, margin:'20px 0', lineHeight:1.1}}>Sort It Out!</h1>
+      <p style={{background:'rgba(255,255,255,0.85)', padding:'15px 25px', borderRadius:'20px', border:`3px solid ${BORDER_COLOR}`, fontWeight:700, marginBottom:30, textAlign:'center', color:TEXT_DARK, fontSize:'1.2rem'}}>Help the Sun sort trash into the right bins!</p>
+      <div style={{width:'100%', maxWidth: '400px', display:'flex', flexDirection:'column', gap:15}}>
+        <button className="btn-cartoony" onClick={onStart} style={{background:'#FBBF24', color:TEXT_DARK, padding:'18px', fontSize:'1.4rem'}}>How to Play</button>
+        <button className="btn-cartoony" onClick={onQuickStart} style={{background:'#4ADE80', color:TEXT_DARK, padding:'18px', fontSize:'1.4rem'}}>Start Game</button>
       </div>
     </div>
   );
@@ -269,19 +293,19 @@ function WelcomeScreen({ onStart, onQuickStart }) {
 function TutorialScreen({ onNext }) {
   return (
     <div style={{flex:1, display:'flex', flexDirection:'column', zIndex:10, animation:'screenIn 0.4s ease', padding:'20px 0'}}>
-      <h2 style={{color:'white', fontSize:'2rem', textShadow:`2px 2px 0 ${BORDER_COLOR}`, marginBottom:15, textAlign:'center'}}>Recycling 101</h2>
-      <div style={{flex:1, overflowY:'auto', background:'white', border:`4px solid ${BORDER_COLOR}`, borderRadius:'25px', padding:'15px', boxShadow:`0 6px 0 ${BORDER_COLOR}`}}>
+      <h2 style={{color:'white', fontSize:'2.5rem', textShadow:`2px 2px 0 ${BORDER_COLOR}`, marginBottom:15, textAlign:'center'}}>Recycling 101</h2>
+      <div className="scroll-area" style={{flex:1, overflowY:'auto', background:'white', border:`4px solid ${BORDER_COLOR}`, borderRadius:'25px', padding:'20px', boxShadow:`0 6px 0 ${BORDER_COLOR}`, maxWidth: '600px', margin: '0 auto'}}>
         {Object.entries(BINS).map(([id, b]) => (
-          <div key={id} style={{display:'flex', gap:12, marginBottom:15, background:`${b.color}15`, padding:'10px', borderRadius:'15px', border:`2px solid ${b.color}`}}>
-            <BinIcon type={id} size={50} color={b.color} />
+          <div key={id} style={{display:'flex', gap:15, marginBottom:20, background:`${b.color}15`, padding:'15px', borderRadius:'15px', border:`2px solid ${b.color}`, alignItems:'center'}}>
+            <BinIcon type={id} size={60} color={b.color} />
             <div style={{textAlign:'left'}}>
-              <div style={{fontWeight:800, fontSize:'1.1rem'}}>{b.label}</div>
-              <div style={{fontSize:'0.9rem', color:'#4B5563'}}>{id === 'trash' ? "Goes to landfill forever. Reduce this!" : "Becomes new things or healthy soil!"}</div>
+              <div style={{fontWeight:800, fontSize:'1.3rem', color:TEXT_DARK}}>{b.label}</div>
+              <div style={{fontSize:'1.1rem', color:'#374151', lineHeight:1.3}}>{id === 'trash' ? "Goes to landfill forever. Reduce this!" : id === 'special' ? "Batteries and tech need careful care!" : "Becomes new things or healthy soil!"}</div>
             </div>
           </div>
         ))}
       </div>
-      <button className="btn-cartoony" onClick={onNext} style={{background:'#4ADE80', color:TEXT_DARK, padding:'15px', fontSize:'1.2rem', marginTop:20}}>I'm Ready!</button>
+      <button className="btn-cartoony" onClick={onNext} style={{background:'#4ADE80', color:TEXT_DARK, padding:'18px', fontSize:'1.4rem', marginTop:20, maxWidth: '400px', margin: '20px auto 0'}}>I'm Ready!</button>
     </div>
   );
 }
@@ -290,19 +314,19 @@ function LevelIntro({ level, onGo }) {
   const l = LEVELS[level-1];
   return (
     <div style={{flex:1, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', zIndex:10, animation:'screenIn 0.4s ease'}}>
-      <BinIcon type={l.icon} size={100} color={l.color} />
-      <div style={{background:l.color, border:`3px solid ${BORDER_COLOR}`, borderRadius:'99px', padding:'5px 15px', fontWeight:800, marginTop:15, color:TEXT_DARK}}>Level {level} of 3</div>
-      <h2 style={{color:'white', fontSize:'clamp(2rem, 8vw, 2.5rem)', textShadow:`2px 2px 0 ${BORDER_COLOR}`, margin:'10px 0'}}>{l.name}</h2>
-      <div style={{background:'white', border:`4px solid ${BORDER_COLOR}`, borderRadius:'25px', padding:'20px', width:'100%', boxShadow:`0 6px 0 ${BORDER_COLOR}`}}>
-        <div style={{fontWeight:800, color:'#6B7280', fontSize:'0.8rem', marginBottom:10}}>YOUR BINS:</div>
-        <div style={{display:'flex', gap:15, justifyContent:'center'}}>
-          {l.bins.map(b => <BinIcon key={b} type={b} size={50} color={BINS[b].color} />)}
+      <BinIcon type={l.icon} size={120} color={l.color} />
+      <div style={{background:l.color, border:`3px solid ${BORDER_COLOR}`, borderRadius:'99px', padding:'8px 20px', fontWeight:800, marginTop:15, color:TEXT_DARK, fontSize:'1.1rem'}}>Level {level} of 3</div>
+      <h2 style={{color:'white', fontSize:'3rem', textShadow:`2px 2px 0 ${BORDER_COLOR}`, margin:'15px 0'}}>{l.name}</h2>
+      <div style={{background:'white', border:`4px solid ${BORDER_COLOR}`, borderRadius:'25px', padding:'25px', width:'100%', maxWidth: '600px', boxShadow:`0 6px 0 ${BORDER_COLOR}`, textAlign:'center'}}>
+        <div style={{fontWeight:800, color:'#6B7280', fontSize:'1rem', marginBottom:15, letterSpacing:'0.05em'}}>YOUR BINS:</div>
+        <div style={{display:'flex', gap:15, justifyContent:'center', flexWrap:'wrap'}}>
+          {l.bins.map(b => <BinIcon key={b} type={b} size={60} color={BINS[b].color} />)}
         </div>
-        <div style={{marginTop:15, fontSize:'0.9rem', fontWeight:600, borderTop:`2px dashed #E5E7EB`, paddingTop:10, color:TEXT_DARK}}>
+        <div style={{marginTop:20, fontSize:'1.1rem', fontWeight:700, borderTop:`2px dashed #E5E7EB`, paddingTop:15, color:TEXT_DARK}}>
           💡 <b>Pro Tip:</b> Try to keep the red bin empty!
         </div>
       </div>
-      <button className="btn-cartoony" onClick={onGo} style={{background:l.color, color:TEXT_DARK, padding:'15px', fontSize:'1.2rem', width:'100%', marginTop:20}}>Start Level {level}!</button>
+      <button className="btn-cartoony" onClick={onGo} style={{background:l.color, color:TEXT_DARK, padding:'20px', fontSize:'1.4rem', width:'100%', maxWidth: '400px', marginTop:25}}>Start Level {level}!</button>
     </div>
   );
 }
@@ -347,118 +371,79 @@ function Game({ level, onComplete }) {
   };
 
   const handleNext = () => {
-    if (idx + 1 >= items.length) {
-      onComplete(score, items.length);
-    } else {
-      setIdx(i => i + 1);
-      setPhase('playing');
-      setDragPos(null);
-      setHoveredBin(null);
-    }
+    if (idx + 1 >= items.length) onComplete(score, items.length);
+    else { setIdx(i => i + 1); setPhase('playing'); setDragPos(null); setHoveredBin(null); }
   };
 
-  const onPointerDown = (e) => {
-    if (phase !== 'playing') return;
-    setDragPos({ x: e.clientX, y: e.clientY });
-  };
-
+  const onPointerDown = (e) => { if (phase !== 'playing') return; setDragPos({ x: e.clientX, y: e.clientY }); };
   const onPointerMove = (e) => {
     if (!dragPos) return;
-    const x = e.clientX;
-    const y = e.clientY;
-    setDragPos({ x, y });
-
+    setDragPos({ x: e.clientX, y: e.clientY });
     let found = null;
     Object.entries(binRefs.current).forEach(([id, ref]) => {
       if (!ref) return;
       const r = ref.getBoundingClientRect();
-      if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) found = id;
+      if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) found = id;
     });
     setHoveredBin(found);
   };
+  const onPointerUp = () => { if (!dragPos) return; const target = hoveredBin; setDragPos(null); setHoveredBin(null); if (target) handleAnswer(target); };
 
-  const onPointerUp = () => {
-    if (!dragPos) return;
-    const target = hoveredBin;
-    setDragPos(null);
-    setHoveredBin(null);
-    if (target) handleAnswer(target);
-  };
+  if(!currentItem) return null;
 
   return (
     <div style={{flex:1, display:'flex', flexDirection:'column', zIndex:10}} onPointerMove={onPointerMove} onPointerUp={onPointerUp}>
-      <div style={{display:'flex', justifyContent:'space-between', gap:10, marginBottom:10}}>
-        <div style={{background:CARD_BG, border:`3px solid ${BORDER_COLOR}`, borderRadius:99, padding:'4px 10px', fontSize:'0.8rem', fontWeight:800, boxShadow:`0 3px 0 ${BORDER_COLOR}`, color:TEXT_DARK}}>
-          L{level} <BinIcon type={lData.icon} size={14} color={lData.color} />
+      <div style={{display:'flex', justifyContent:'space-between', gap:12, marginBottom:15}}>
+        <div style={{background:CARD_BG, border:`3px solid ${BORDER_COLOR}`, borderRadius:99, padding:'6px 14px', fontSize:'1rem', fontWeight:800, boxShadow:`0 3px 0 ${BORDER_COLOR}`, color:TEXT_DARK}}>
+          L{level} <BinIcon type={lData.icon} size={18} color={lData.color} />
         </div>
-        <div style={{flex:1, height:16, background:'white', border:`3px solid ${BORDER_COLOR}`, borderRadius:99, overflow:'hidden', position:'relative'}}>
+        <div style={{flex:1, height:20, background:'white', border:`3px solid ${BORDER_COLOR}`, borderRadius:99, overflow:'hidden', position:'relative'}}>
           <div style={{height:'100%', width:`${(timeLeft/lData.timePerItem)*100}%`, background:timeLeft < 3 ? '#F87171' : '#4ADE80', transition:'width 0.1s linear'}} />
         </div>
-        <div style={{background:CARD_BG, border:`3px solid ${BORDER_COLOR}`, borderRadius:99, padding:'4px 10px', fontSize:'0.8rem', fontWeight:800, boxShadow:`0 3px 0 ${BORDER_COLOR}`, color:TEXT_DARK}}>
-          <UIcon name="star" size={14} color="#FBBF24" /> {score}
+        <div style={{background:CARD_BG, border:`3px solid ${BORDER_COLOR}`, borderRadius:99, padding:'6px 14px', fontSize:'1rem', fontWeight:800, boxShadow:`0 3px 0 ${BORDER_COLOR}`, color:TEXT_DARK, display:'flex', alignItems:'center', gap:5}}>
+          <svg width="18" height="18" viewBox="0 0 100 100"><path d="M 50 10 L 62 35 L 90 40 L 70 60 L 75 88 L 50 75 L 25 88 L 30 60 L 10 40 L 38 35 Z" fill="#FBBF24" stroke={BORDER_COLOR} strokeWidth="6"/></svg> {score}
         </div>
       </div>
 
       <div style={{flex:1, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', position:'relative'}}>
-        <Sun mood={timeLeft < 3 ? 'worried' : 'happy'} size={80} />
-        <div style={{fontSize:'0.8rem', fontWeight:700, color:TEXT_DARK, margin:'10px 0'}}>Item {idx+1} of {items.length}</div>
+        <Sun mood={timeLeft < 3 ? 'worried' : 'happy'} size={120} />
+        <div style={{fontSize:'1.3rem', fontWeight:700, color:TEXT_DARK, margin:'15px 0'}}>Item {idx+1} of {items.length}</div>
         
-        <div 
-          onPointerDown={onPointerDown}
-          style={{
-            width:'min(200px, 50vw)', height:'min(200px, 50vw)', background:CARD_BG, border:`4px solid ${BORDER_COLOR}`, borderRadius:'30px',
-            display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center',
-            boxShadow:`0 8px 0 ${BORDER_COLOR}`, opacity: dragPos ? 0 : 1, transition:'opacity 0.2s',
-            animation:'itemDrop 0.3s ease'
-          }}
-        >
-          <ItemIcon type={currentItem.type} size={80} />
-          <div style={{fontWeight:800, marginTop:10, textAlign:'center', fontSize:'0.9rem', padding:'0 5px', color:TEXT_DARK}}>{currentItem.name}</div>
+        <div onPointerDown={onPointerDown} style={{ width:'min(280px, 60vw)', height:'min(280px, 60vw)', background:CARD_BG, border:`4px solid ${BORDER_COLOR}`, borderRadius:'40px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', boxShadow:`0 10px 0 ${BORDER_COLOR}`, opacity: dragPos ? 0 : 1, transition:'opacity 0.2s', animation:'itemDrop 0.3s ease' }}>
+          <ItemIcon type={currentItem.type} size={120} />
+          <div style={{fontWeight:800, marginTop:15, textAlign:'center', fontSize:'1.4rem', padding:'0 10px', color:TEXT_DARK}}>{currentItem.name}</div>
         </div>
       </div>
 
-      {/* Grid updated to ensure a clean layout on narrow phone screens */}
-      <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(60px, 1fr))', gap:8, marginBottom:10}}>
+      <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(100px, 1fr))', gap:15, marginBottom:10, maxWidth: '800px', width: '100%', margin: '0 auto'}}>
         {lData.bins.map(bId => {
           const b = BINS[bId];
           const isHovered = hoveredBin === bId;
           return (
-            <div 
-              key={bId} 
-              ref={el => binRefs.current[bId] = el}
-              style={{
-                background: isHovered ? b.color : 'white', 
-                border:`4px solid ${BORDER_COLOR}`, borderRadius:'20px', padding:'10px 5px',
-                display:'flex', flexDirection:'column', alignItems:'center', gap:5,
-                boxShadow: isHovered ? `0 4px 0 ${BORDER_COLOR}` : `0 6px 0 ${BORDER_COLOR}`,
-                transform: isHovered ? 'translateY(2px)' : 'none',
-                transition:'all 0.1s',
-                color: TEXT_DARK
-              }}
-            >
-              <BinIcon type={bId} size={35} color={isHovered ? 'white' : b.color} />
-              <div style={{fontSize:'clamp(0.6rem, 2.5vw, 0.7rem)', fontWeight:800}}>{b.label}</div>
+            <div key={bId} ref={el => binRefs.current[bId] = el} style={{ background: isHovered ? b.color : 'white', border:`4px solid ${BORDER_COLOR}`, borderRadius:'24px', padding:'15px 5px', display:'flex', flexDirection:'column', alignItems:'center', gap:8, boxShadow: isHovered ? `0 4px 0 ${BORDER_COLOR}` : `0 6px 0 ${BORDER_COLOR}`, transform: isHovered ? 'translateY(2px)' : 'none', transition:'all 0.1s' }}>
+              <BinIcon type={bId} size={50} color={isHovered ? 'white' : b.color} />
+              <div style={{fontSize:'1rem', fontWeight:800, color:TEXT_DARK}}>{b.label}</div>
             </div>
           );
         })}
       </div>
 
       {dragPos && (
-        <div style={{position:'fixed', left:dragPos.x-50, top:dragPos.y-50, pointerEvents:'none', zIndex:100}}>
-          <div style={{width:'100px', height:'100px', background:CARD_BG, border:`4px solid ${BORDER_COLOR}`, borderRadius:'20px', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:`0 10px 20px rgba(0,0,0,0.2)`}}>
-            <ItemIcon type={currentItem.type} size={60} />
+        <div style={{position:'fixed', left:dragPos.x-70, top:dragPos.y-70, pointerEvents:'none', zIndex:100}}>
+          <div style={{width:'140px', height:'140px', background:CARD_BG, border:`4px solid ${BORDER_COLOR}`, borderRadius:'24px', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:`0 15px 30px rgba(0,0,0,0.3)`}}>
+            <ItemIcon type={currentItem.type} size={90} />
           </div>
         </div>
       )}
 
       {phase === 'fact' && (
         <div style={{position:'absolute', inset:0, background:'rgba(56, 189, 248, 0.95)', zIndex:200, display:'flex', alignItems:'center', justifyContent:'center', padding:20}}>
-          <div style={{background:'white', border:`4px solid ${BORDER_COLOR}`, borderRadius:'30px', padding:20, textAlign:'center', boxShadow:`0 8px 0 ${BORDER_COLOR}`, width:'100%'}}>
-            <Sun mood={lastCorrect ? 'happy' : 'sad'} size={80} />
-            <h3 style={{fontSize:'1.5rem', margin:'10px 0', color:TEXT_DARK}}>{lastCorrect ? "Correct!" : "Not Quite!"}</h3>
-            <ItemIcon type={currentItem.type} size={70} />
-            <p style={{fontSize:'0.95rem', fontWeight:600, color:TEXT_DARK, margin:'15px 0', lineHeight:1.4}}>{currentItem.fact}</p>
-            <button className="btn-cartoony" onClick={handleNext} style={{background:BINS[currentItem.bin].color, color:TEXT_DARK, padding:'12px', width:'100%'}}>Got It!</button>
+          <div style={{background:'white', border:`4px solid ${BORDER_COLOR}`, borderRadius:'35px', padding:'30px 20px', textAlign:'center', boxShadow:`0 10px 0 ${BORDER_COLOR}`, width:'100%', maxWidth:'500px'}}>
+            <Sun mood={lastCorrect ? 'happy' : 'sad'} size={100} />
+            <h3 style={{fontSize:'2.5rem', margin:'15px 0', color:TEXT_DARK, textShadow:`1px 1px 0 white` }}>{lastCorrect ? "Correct!" : "Not Quite!"}</h3>
+            <div style={{margin:'20px 0'}}><ItemIcon type={currentItem.type} size={90} /></div>
+            <p style={{fontSize:'1.25rem', fontWeight:600, color:TEXT_DARK, margin:'15px 0', lineHeight:1.5}}>{currentItem.fact}</p>
+            <button className="btn-cartoony" onClick={handleNext} style={{background:BINS[currentItem.bin].color, color:TEXT_DARK, padding:'18px', width:'100%', fontSize:'1.4rem'}}>Keep Going!</button>
           </div>
         </div>
       )}
@@ -470,15 +455,15 @@ function ResultsScreen({ score, total, level, onNext, onReplay }) {
   const pct = Math.round((score/total)*100);
   return (
     <div style={{flex:1, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', zIndex:10, animation:'screenIn 0.4s ease'}}>
-      <Sun mood={pct >= 70 ? 'happy' : 'sad'} size={120} />
-      <h2 style={{color:'white', fontSize:'clamp(2rem, 8vw, 2.5rem)', textShadow:`2px 2px 0 ${BORDER_COLOR}`, margin:'15px 0'}}>Level {level} Done!</h2>
-      <div style={{background:'white', border:`4px solid ${BORDER_COLOR}`, borderRadius:'30px', padding:25, width:'100%', boxShadow:`0 8px 0 ${BORDER_COLOR}`, textAlign:'center', marginBottom:20}}>
-        <div style={{fontSize:'clamp(3rem, 15vw, 4rem)', fontWeight:900, color: pct >= 70 ? '#4ADE80' : '#F87171'}}>{score}/{total}</div>
-        <div style={{fontWeight:800, color:'#6B7280'}}>Items Sorted Correctly</div>
+      <Sun mood={pct >= 70 ? 'happy' : 'sad'} size={150} />
+      <h2 style={{color:'white', fontSize:'3.5rem', textShadow:`2px 2px 0 ${BORDER_COLOR}`, margin:'15px 0'}}>Level {level} Done!</h2>
+      <div style={{background:'white', border:`4px solid ${BORDER_COLOR}`, borderRadius:'35px', padding:30, width:'100%', maxWidth: '500px', boxShadow:`0 10px 0 ${BORDER_COLOR}`, textAlign:'center', marginBottom:25}}>
+        <div style={{fontSize:'6rem', fontWeight:900, color: pct >= 70 ? '#4ADE80' : '#F87171', lineHeight:1}}>{score}/{total}</div>
+        <div style={{fontWeight:800, color:'#6B7280', fontSize:'1.4rem', marginTop:10}}>Items Sorted Correctly</div>
       </div>
-      <div style={{display:'flex', gap:10, width:'100%'}}>
-        <button className="btn-cartoony" onClick={onReplay} style={{flex:1, background:'#F3F4F6', color:TEXT_DARK, padding:'15px'}}>Replay</button>
-        <button className="btn-cartoony" onClick={onNext} style={{flex:1, background:'#4ADE80', color:TEXT_DARK, padding:'15px'}}>Next Level</button>
+      <div style={{display:'flex', gap:15, width:'100%', maxWidth: '500px'}}>
+        <button className="btn-cartoony" onClick={onReplay} style={{flex:1, background:'#F3F4F6', color:TEXT_DARK, padding:'20px', fontSize:'1.4rem'}}>Replay</button>
+        <button className="btn-cartoony" onClick={onNext} style={{flex:1, background:'#4ADE80', color:TEXT_DARK, padding:'20px', fontSize:'1.4rem'}}>Next Level</button>
       </div>
     </div>
   );
@@ -487,10 +472,11 @@ function ResultsScreen({ score, total, level, onNext, onReplay }) {
 function FinalScreen({ score, total, onRestart }) {
   return (
     <div style={{flex:1, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', zIndex:10, animation:'screenIn 0.4s ease'}}>
-      <UIcon name="trophy" size={120} color="#FBBF24" />
-      <h2 style={{color:'white', fontSize:'clamp(2rem, 8vw, 2.5rem)', textShadow:`2px 2px 0 ${BORDER_COLOR}`, margin:'15px 0'}}>Earth Hero!</h2>
-      <p style={{background:'rgba(255,255,255,0.85)', padding:'15px 20px', borderRadius:'20px', border:`3px solid ${BORDER_COLOR}`, fontWeight:700, marginBottom:30, textAlign:'center', color:TEXT_DARK}}>You sorted {score} items correctly. The Earth is happier because of you!</p>
-      <button className="btn-cartoony" onClick={onRestart} style={{background:'#4ADE80', color:TEXT_DARK, padding:'20px', width:'100%', fontSize:'1.4rem'}}>Play Again!</button>
+      <Confetti />
+      <svg width="160" height="160" viewBox="0 0 100 100"><path d="M 50 10 L 62 35 L 90 40 L 70 60 L 75 88 L 50 75 L 25 88 L 30 60 L 10 40 L 38 35 Z" fill="#FBBF24" stroke={BORDER_COLOR} strokeWidth="6"/></svg>
+      <h2 style={{color:'white', fontSize:'4rem', textShadow:`2px 2px 0 ${BORDER_COLOR}`, margin:'15px 0', textAlign:'center'}}>Earth Hero!</h2>
+      <p style={{background:'rgba(255,255,255,0.85)', padding:'25px 35px', borderRadius:'25px', border:`3px solid ${BORDER_COLOR}`, fontWeight:700, marginBottom:35, textAlign:'center', color:TEXT_DARK, fontSize:'1.5rem', lineHeight:1.4, maxWidth: '600px'}}>You sorted {score} items correctly. The Earth is happier because of you!</p>
+      <button className="btn-cartoony" onClick={onRestart} style={{background:'#4ADE80', color:TEXT_DARK, padding:'25px', width:'100%', maxWidth: '400px', fontSize:'1.8rem'}}>Play Again!</button>
     </div>
   );
 }
